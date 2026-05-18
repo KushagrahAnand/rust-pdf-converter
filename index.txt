@@ -1,5 +1,5 @@
 hello
-hendrerit
+hi
 what 
 are 
 you 
@@ -8,5 +8,4 @@ i
 want 
 to finish
 this
-fking
 project
