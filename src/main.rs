@@ -1,5 +1,6 @@
-
-use std::{fs::{File, write}, io::Read, process};
+use std::fs::{File, write};
+use std::io::Read;
+use std::process;
 use text_to_pdf::create_pdf;
 
 fn main() {
