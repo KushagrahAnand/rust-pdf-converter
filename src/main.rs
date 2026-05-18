@@ -1,6 +1,6 @@
 
-use printpdf::*;
-use std::{fs::File, io::Read, process};
+use std::{fs::{File, write}, io::Read, process};
+use text_to_pdf::create_pdf;
 
 fn main() {
     let mut file = match File::open("index.txt") {
@@ -16,5 +16,14 @@ fn main() {
         println!("Error caused due to : {}", e);
         process::exit(1)
     };
-    
+
+    let pdf_bytes = create_pdf(data);
+
+    match write("output.pdf", pdf_bytes) {
+        Ok(_) => println!("Successfully created pdf"),
+        Err(e) => {
+            println!("Error creating pdf: {}", e);
+            process::exit(1);
+        }
+    }
 }

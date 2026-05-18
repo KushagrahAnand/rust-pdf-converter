@@ -340,13 +340,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "docx_to_pdf"
-version = "0.1.0"
-dependencies = [
- "printpdf",
-]
-
-[[package]]
 name = "dtoa"
 version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1427,6 +1420,13 @@ dependencies = [
  "futf",
  "mac",
  "utf-8",
+]
+
+[[package]]
+name = "text_to_pdf"
+version = "0.1.0"
+dependencies = [
+ "printpdf",
 ]
 
 [[package]]
