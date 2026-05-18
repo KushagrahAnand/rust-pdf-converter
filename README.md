@@ -39,5 +39,5 @@ To build and test the current layout pipeline locally:
 
 1. Clone the repository and navigate to the project root:
    ```bash
-   git clone [https://github.com/KushagrahAnand/rust-pdf-converter.git](https://github.com/KushagrahAnand/rust-pdf-converter.git)
+   git clone https://github.com/KushagrahAnand/rust-pdf-converter.git
    cd rust-pdf-converter
