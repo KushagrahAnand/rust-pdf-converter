@@ -12,7 +12,7 @@ A fast, lightweight Rust CLI tool that converts text files into cleanly structur
 ## Usage
 
 ```bash
-text_to_pdf --input <PATH> --output <PATH> [--font <PATH>] [--size <POINTS>]
+converter --input <PATH> --output <PATH> [--font <PATH>] [--size <POINTS>]
 ```
 
 ### Arguments
@@ -39,7 +39,7 @@ text_to_pdf --input <PATH> --output <PATH> [--font <PATH>] [--size <POINTS>]
 
 3. Run it:
 ```bash
-   ./target/release/text_to_pdf --input input.txt --output output.pdf
+   ./target/release/converter --input input.txt --output output.pdf
 ```
 
 ## Roadmap
