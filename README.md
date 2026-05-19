@@ -39,6 +39,10 @@ cargo build --release
 
 3. Run it:
 ```bash
+# Windows
+.\target\release\converter --input input.txt --output output.pdf
+
+# Linux/Mac
 ./target/release/converter --input input.txt --output output.pdf
 ```
 
