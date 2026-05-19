@@ -1,29 +1,55 @@
 use std::fs::{File, write};
 use std::io::Read;
+use std::path::PathBuf;
 use std::process;
 use text_to_pdf::create_pdf;
+use clap::Parser;
+
+#[derive(Parser)]
+///Tool to create pdf from text file
+#[command(version, about, long_about = None)]
+struct Cli {
+    ///Name/path of text file
+    #[arg(short, long)]
+    input: PathBuf,
+    
+    ///Name/path of output pdf
+    #[arg(short, long)]
+    output: PathBuf,
+
+    ///Font.
+    ///Some fonts are present inside ./assets 
+    #[arg(short, long, default_value="./assets/fonts/Roboto-Regular.ttf")]
+    font: PathBuf,
+
+    ///Text size
+    #[arg(short, long, default_value_t = 16.0)]
+    size:f32,
+}
 
 fn main() {
-    let mut file = match File::open("index.txt") {
+    let args = Cli::parse();
+
+    let mut file = match File::open(args.input) {
         Ok(file) => file,
         Err(e) => {
-            println!("Error due to : {}", e);
+            eprintln!("Error in getting input text file: {}", e);
             process::exit(1);
         },
     };
 
     let mut data = String::new();
     if let Err(e) = file.read_to_string(&mut data) {
-        println!("Error caused due to : {}", e);
+        eprintln!("Error : {}", e);
         process::exit(1)
     };
 
-    let pdf_bytes = create_pdf(data);
+    let pdf_bytes = create_pdf(data, args.font, args.size);
 
-    match write("output.pdf", pdf_bytes) {
+    match write(args.output, pdf_bytes) {
         Ok(_) => println!("Successfully created pdf"),
         Err(e) => {
-            println!("Error creating pdf: {}", e);
+            eprintln!("Error in creating pdf: {}", e);
             process::exit(1);
         }
     }

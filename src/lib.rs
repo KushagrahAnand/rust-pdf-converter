@@ -1,18 +1,27 @@
+use std::{path::PathBuf, process};
+
 use printpdf::*;
 
-pub fn create_pdf(data: String) -> Vec<u8> {
-    let mut doc = PdfDocument::new("Output");
+pub fn create_pdf(data: String, font_path:PathBuf, size:f32) -> Vec<u8> {
+    let mut doc = PdfDocument::new("PDF");
 
-    let font_bytes = include_bytes!("../assets/fonts/Roboto-Regular.ttf");
+    let font_bytes = match std::fs::read(font_path) {
+        Ok(bytes) => bytes,
+        Err(e) => {
+            eprintln!("Error in getting font file: {}", e);
+            process::exit(1);
+        }
+    };
     let font_index = 0;
     let mut warnings = Vec::new();
-    let font = ParsedFont::from_bytes(font_bytes, font_index, &mut warnings).unwrap();
+    let font = ParsedFont::from_bytes(&font_bytes, font_index, &mut warnings).unwrap();
 
     let font_id = doc.add_font(&font);
-    let size: Pt = Pt(16.0);
-    let line_height = Pt(20.0);
+    let size = Pt(size);
+    let line_height = Pt(size.0*1.25);
 
-    let top_margin = Pt(750.0);
+    let page_height = Pt(842.0);
+    let top_margin = page_height - Pt(50.0);
     let bottom_margin = Pt(50.0);
     let left_margin = Pt(50.0);
 
@@ -23,7 +32,6 @@ pub fn create_pdf(data: String) -> Vec<u8> {
             font: PdfFontHandle::External(font_id.clone()),
             size,
         },
-        Op::SetCharacterSpacing { multiplier: 2.0 },
         Op::SetLineHeight { lh: line_height },
         Op::SetTextCursor {
             pos: Point {
