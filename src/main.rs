@@ -9,11 +9,11 @@ use clap::Parser;
 ///Tool to create pdf from text file
 #[command(version, about, long_about = None)]
 struct Cli {
-    ///Name/path of text file
+    ///Name/Path of text file
     #[arg(short, long)]
     input: PathBuf,
     
-    ///Name/path of output pdf
+    ///Name/Path of output pdf
     #[arg(short, long)]
     output: PathBuf,
 
