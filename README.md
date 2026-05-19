@@ -28,18 +28,18 @@ converter --input <PATH> --output <PATH> [--font <PATH>] [--size <POINTS>]
 
 1. Clone the repository and navigate to the project root:
 ```bash
-   git clone https://github.com/KushagrahAnand/rust-pdf-converter.git
-   cd rust-pdf-converter
+git clone https://github.com/KushagrahAnand/rust-pdf-converter.git
+cd rust-pdf-converter
 ```
 
 2. Build the project:
 ```bash
-   cargo build --release
+cargo build --release
 ```
 
 3. Run it:
 ```bash
-   ./target/release/converter --input input.txt --output output.pdf
+./target/release/converter --input input.txt --output output.pdf
 ```
 
 ## Roadmap
