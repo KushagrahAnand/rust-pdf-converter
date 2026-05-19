@@ -2,7 +2,7 @@ use std::fs::{File, write};
 use std::io::Read;
 use std::path::PathBuf;
 use std::process;
-use text_to_pdf::create_pdf;
+use converter::create_pdf;
 use clap::Parser;
 
 #[derive(Parser)]
