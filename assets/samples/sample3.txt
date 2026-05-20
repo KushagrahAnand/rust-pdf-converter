@@ -1,0 +1,26 @@
+Code Sample Test
+
+fn main() {
+    let x = 5;
+    let y = 10;
+    let sum = x + y;
+    println!("Sum is: {}", sum);
+}
+
+pub fn calculate(a: f32, b: f32) -> f32 {
+    let result = a * b + (a / b) - (b - a);
+    return result;
+}
+
+struct Point {
+    x: f32,
+    y: f32,
+}
+
+impl Point {
+    fn new(x: f32, y: f32) -> Self {
+        Point { x, y }
+    }
+}
+
+Special characters test: @ # $ % & * ( ) _ + = [ ] { } | ; : , . < > ? /

@@ -1,0 +1,27 @@
+Stress Test File
+
+Hi.
+
+Hello.
+
+Ok.
+
+This is a medium length line that fits on one line easily.
+
+This is a long line that will wrap. It keeps going and going and going until it definitely overflows the maximum width of the page and forces the wrapping logic to kick in and split it across two lines.
+
+Superlongwordwithnospacesthatmightcauseanedgecaseinyourwrappinglogic.
+
+A
+
+BB
+
+CCC
+
+DDDD
+
+EEEEE
+
+This tests alternating between very short and very long content to make sure current_row and current_row_width reset correctly between lines.
+
+This is the final long line of the stress test file designed to push the pagination logic and make sure the last page is always correctly pushed into the pages vector before saving the document to disk.

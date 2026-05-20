@@ -1,0 +1,52 @@
+Hello World
+
+This is a short line.
+
+This is a very long line that should definitely trigger the word wrapping logic because it contains way too many words to fit on a single line of an A4 page without wrapping to the next line automatically.
+
+Word wrapping test with some longer words like internationalization and acknowledgement and responsibilities and infrastructure.
+
+Short.
+
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+
+This paragraph is designed to test multi-page functionality. It has enough lines to push content beyond the bottom margin and force the creation of a second page in the output PDF document.
+Line 1
+Line 2
+Line 3
+Line 4
+Line 5
+Line 6
+Line 7
+Line 8
+Line 9
+Line 10
+Line 11
+Line 12
+Line 13
+Line 14
+Line 15
+Line 16
+Line 17
+Line 18
+Line 19
+Line 20
+Line 21
+Line 22
+Line 23
+Line 24
+Line 25
+Line 26
+Line 27
+Line 28
+Line 29
+Line 30
+Line 31
+Line 32
+Line 33
+Line 34
+Line 35
+
+This line appears after the page break and should be on page 2.
+
+End of test file.
