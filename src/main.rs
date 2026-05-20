@@ -19,7 +19,7 @@ struct Cli {
 
     ///Font.
     ///Some fonts are present inside ./assets 
-    #[arg(short, long, default_value="./assets/fonts/Roboto-Regular.ttf")]
+    #[arg(short, long, default_value="./assets/fonts/roboto/Roboto-Regular.ttf")]
     font: PathBuf,
 
     ///Text size

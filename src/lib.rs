@@ -43,7 +43,7 @@ pub fn create_pdf(data: String, font_path: PathBuf, size: f32) -> Vec<u8> {
             flush_page(&mut pages, &mut current_page_ops, &mut current_y, top_margin, new_page_ops());
         }
 
-        get_line(font.clone(), size, line, max_width, &mut current_page_ops, &mut current_y, line_height, bottom_margin, &mut pages, top_margin, new_page_ops());
+        get_line(font.clone(), &mut pages, size, line, max_width, &mut current_page_ops, &mut current_y, line_height, bottom_margin, top_margin, new_page_ops());
     }
 
     if current_y < top_margin {
@@ -115,6 +115,7 @@ fn flush_page(
 
 fn get_line(
     font:ParsedFont,
+    pages:&mut Vec<PdfPage>,
     size: Pt,
     line:&str,
     max_width:f32,
@@ -122,7 +123,7 @@ fn get_line(
     current_y:&mut Pt,
     line_height: Pt,
     bottom_margin: Pt,
-    pages:&mut Vec<PdfPage>,
+    
     top_margin:Pt,
     new_page_ops:Vec<Op>
 ) {
