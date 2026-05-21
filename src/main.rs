@@ -30,7 +30,7 @@ struct Cli {
     paper: String,
 
     ///Orientation (portrait, landscape)
-    #[arg(long, default_value="portrait")]
+    #[arg(short = 'r', long, default_value="portrait")]
     orientation: String,
 }
 
