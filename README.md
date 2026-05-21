@@ -8,12 +8,12 @@ A fast, lightweight Rust CLI tool that converts text files into cleanly structur
 - **Custom Typography:** Supports custom TrueType fonts passed dynamically via CLI. Several fonts included in `./assets/fonts`.
 - **Dynamic Multi-Page Engine:** Automatically paginates text across multiple pages without layout fractures or cut-offs.
 - **Word Wrapping:** Automatically wraps long lines using real font glyph width measurement for accurate line breaking.
-- **Configurable:** Font size, font path, input and output paths all configurable via flags.
+- **Configurable:** Font size, font path, page dimensions, orientation, input, and output paths are all configurable via flags
 
 ## Usage
 
 ```bash
-converter --input <PATH> --output <PATH> [--font <PATH>] [--size <POINTS>]
+converter --input <PATH> --output <PATH> [--font <PATH>] [--size <POINTS>] [--paper <SIZE>] [--orientation <ORIENTATION>]
 ```
 
 ### Arguments
@@ -24,11 +24,13 @@ converter --input <PATH> --output <PATH> [--font <PATH>] [--size <POINTS>]
 | `--output` | `-o` | Path for the generated PDF | required |
 | `--font` | `-f` | Path to a `.ttf` font file | `./assets/fonts/Roboto-Regular.ttf` |
 | `--size` | `-s` | Font size in points | `16.0` |
+| `--paper` | `-p` | Paper size | `A4` |
+| `--orientation` | `-r` | Orientation | `Potrait` |
 
 ### Example
 
 ```bash
-converter -i ./assets/samples/sample.txt -o output.pdf -f ./assets/fonts/Roboto-Regular.ttf -s 16
+converter -i ./assets/samples/sample.txt -o output.pdf -p A4 -r landscape -s 14.0
 ```
 
 ## Installation
@@ -67,6 +69,6 @@ The repository includes ready-to-use assets:
 - [x] CLI interface with `clap`
 - [x] Word wrapping with glyph-accurate line measurement
 - [x] Modular code structure
-- [ ] Custom margin and line-height flags
+- [x] Support for diverse page sizes and layout orientations
 - [ ] `.docx` to PDF conversion
 - [ ] `.pptx` to PDF conversion
