@@ -1,17 +1,12 @@
-use std::{path::PathBuf, process};
 mod words;
-use crate::words::*;
+mod page_layout;
+
+use std::{path::PathBuf, process};
 use printpdf::*;
+use crate::words::*;
+use crate::page_layout::*;
 
-const PAGE_WIDTH_MM:f32 = 210.0;
-const PAGE_HEIGHT_MM:f32 = 297.0;
-const PAGE_HEIGHT_PT:f32 = 842.0;
-const TOP_MARGIN_OFFSET:f32 = 50.0;
-const BOTTOM_MARGIN:f32 = 50.0;
-const LEFT_MARGIN:f32 = 50.0;
-const RIGHT_MARGIN:f32 = 495.5;
-
-pub fn create_pdf(data: String, font_path: PathBuf, size: f32) -> Vec<u8> {
+pub fn create_pdf(data: String, font_path: PathBuf, size: f32, paper: String, orientation: String) -> Vec<u8> {
     let mut doc = PdfDocument::new("PDF");
 
     let font = get_font(font_path);
@@ -20,12 +15,27 @@ pub fn create_pdf(data: String, font_path: PathBuf, size: f32) -> Vec<u8> {
     let size = Pt(size);
     let line_height = Pt(size.0 * 1.25);
 
-    let page_height = Pt(PAGE_HEIGHT_PT);
-    let top_margin = page_height - Pt(TOP_MARGIN_OFFSET);
-    let bottom_margin = Pt(BOTTOM_MARGIN);
-    let left_margin = Pt(LEFT_MARGIN);
-    let right_margin = Pt(RIGHT_MARGIN);
+    let layout = match paper.parse::<PSize>() {
+        Ok(p) => p.dimensions(),
+        Err(e) => {
+            eprintln!("Error: {}", e);
+            process::exit(1);
+        }
+    };
+
+    let layout = if orientation.to_lowercase() == "landscape" {
+        layout.landscape()
+    } else {
+        layout
+    };
+
+    let top_margin = Pt(layout.top_margin);
+    let bottom_margin = Pt(layout.bottom_margin);
+    let left_margin = Pt(layout.left_margin);
+    let right_margin = Pt(layout.right_margin);
     let max_width = (right_margin - left_margin).0;
+    let width = layout.width;
+    let height = layout.height;
 
     let new_page_ops = move || build_page_ops(font_id.clone(), size, line_height, left_margin, top_margin);
 
@@ -41,14 +51,14 @@ pub fn create_pdf(data: String, font_path: PathBuf, size: f32) -> Vec<u8> {
         }
 
         if current_y < bottom_margin {
-            flush_page(&mut pages, &mut current_page_ops, &mut current_y, top_margin, new_page_ops());
+            flush_page(&mut pages, &mut current_page_ops, &mut current_y, top_margin, new_page_ops(), width, height);
         }
 
-        get_line(font.clone(), &mut pages, size, line, max_width, &mut current_page_ops, &mut current_y, line_height, bottom_margin, top_margin, new_page_ops());
+        get_line(font.clone(), &mut pages, size, line, max_width, &mut current_page_ops, &mut current_y, line_height, bottom_margin, top_margin, new_page_ops(), width, height);
     }
 
     if current_y < top_margin {
-        let page = PdfPage::new(Mm(210.0), Mm(297.0), current_page_ops);
+        let page = PdfPage::new(width, height, current_page_ops);
         pages.push(page);
     }
 
@@ -56,8 +66,7 @@ pub fn create_pdf(data: String, font_path: PathBuf, size: f32) -> Vec<u8> {
     doc.with_pages(pages).save(&PdfSaveOptions::default(), &mut warnings)
 }
 
-
-fn get_font(font_path: PathBuf) -> ParsedFont{
+fn get_font(font_path: PathBuf) -> ParsedFont {
     let font_bytes = match std::fs::read(font_path) {
         Ok(bytes) => bytes,
         Err(e) => {
@@ -65,28 +74,26 @@ fn get_font(font_path: PathBuf) -> ParsedFont{
             process::exit(1);
         }
     };
-    let font_index = 0;
     let mut warnings = Vec::new();
-    match ParsedFont::from_bytes(&font_bytes, font_index, &mut warnings) {
+    match ParsedFont::from_bytes(&font_bytes, 0, &mut warnings) {
         Some(font) => font,
         None => {
             eprintln!("Error in font file");
             process::exit(1);
-        },
+        }
     }
 }
 
-
 fn build_page_ops(
-    font_id:FontId, 
-    size: Pt, 
-    line_height: Pt, 
-    left_margin:Pt, 
-    top_margin:Pt 
+    font_id: FontId,
+    size: Pt,
+    line_height: Pt,
+    left_margin: Pt,
+    top_margin: Pt,
 ) -> Vec<Op> {
     vec![
         Op::SetFont {
-            font: PdfFontHandle::External(font_id.clone()),
+            font: PdfFontHandle::External(font_id),
             size,
         },
         Op::SetLineHeight { lh: line_height },
@@ -97,17 +104,18 @@ fn build_page_ops(
             },
         },
     ]
-} 
-
+}
 
 fn flush_page(
-    pages:&mut Vec<PdfPage>, 
-    current_page_ops:&mut Vec<Op>, 
-    current_y:&mut Pt, 
-    top_margin:Pt, 
-    new_page_ops:Vec<Op>
+    pages: &mut Vec<PdfPage>,
+    current_page_ops: &mut Vec<Op>,
+    current_y: &mut Pt,
+    top_margin: Pt,
+    new_page_ops: Vec<Op>,
+    width: Mm,
+    height: Mm,
 ) {
-    let page = PdfPage::new(Mm(PAGE_WIDTH_MM), Mm(PAGE_HEIGHT_MM), current_page_ops.clone());
+    let page = PdfPage::new(width, height, current_page_ops.clone());
     pages.push(page);
     *current_page_ops = new_page_ops;
     *current_y = top_margin;

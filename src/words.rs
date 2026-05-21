@@ -1,63 +1,63 @@
 use printpdf::*;
 
 pub fn get_line(
-    font:ParsedFont,
-    pages:&mut Vec<PdfPage>,
+    font: ParsedFont,
+    pages: &mut Vec<PdfPage>,
     size: Pt,
-    line:&str,
-    max_width:f32,
-    current_page_ops:&mut Vec<Op>,
-    current_y:&mut Pt,
+    line: &str,
+    max_width: f32,
+    current_page_ops: &mut Vec<Op>,
+    current_y: &mut Pt,
     line_height: Pt,
     bottom_margin: Pt,
-    
-    top_margin:Pt,
-    new_page_ops:Vec<Op>
+    top_margin: Pt,
+    new_page_ops: Vec<Op>,
+    width: Mm,
+    height: Mm,
 ) {
     let space_width = measure_word(" ", &font, size);
-        let mut current_row = String::new();
-        let mut current_row_width = Pt(0.0);
+    let mut current_row = String::new();
+    let mut current_row_width = Pt(0.0);
 
-        for word in line.split_whitespace() {
-            let word_width = measure_word(word, &font, size);
+    for word in line.split_whitespace() {
+        let word_width = measure_word(word, &font, size);
 
-            if (current_row_width + word_width + space_width).0 > max_width {
-                if !current_row.is_empty() {
-                    current_page_ops.push(Op::ShowText {
-                        items: vec![TextItem::Text(current_row.clone())],
-                    });
-                    current_page_ops.push(Op::AddLineBreak);
-                    *current_y -= line_height;
+        if (current_row_width + word_width + space_width).0 > max_width {
+            if !current_row.is_empty() {
+                current_page_ops.push(Op::ShowText {
+                    items: vec![TextItem::Text(current_row.clone())],
+                });
+                current_page_ops.push(Op::AddLineBreak);
+                *current_y -= line_height;
 
-                    if *current_y < bottom_margin {
-                        let page = PdfPage::new(Mm(210.0), Mm(297.0), current_page_ops.clone());
-                        pages.push(page);
-                        *current_page_ops = new_page_ops.clone();
-                        *current_y = top_margin;
-                    }
+                if *current_y < bottom_margin {
+                    let page = PdfPage::new(width, height, current_page_ops.clone());
+                    pages.push(page);
+                    *current_page_ops = new_page_ops.clone();
+                    *current_y = top_margin;
                 }
-
-                current_row = word.to_string();
-                current_row_width = word_width;
-            } else {
-                if !current_row.is_empty() {
-                    current_row.push(' ');
-                    current_row_width = current_row_width + space_width;
-                }
-                current_row.push_str(word);
-                current_row_width = current_row_width + word_width;
             }
-        }
 
-        if !current_row.is_empty() {
-            current_page_ops.push(Op::ShowText {
-                items: vec![TextItem::Text(current_row)],
-            });
-            current_page_ops.push(Op::AddLineBreak);
-            *current_y -= line_height;
+            current_row = word.to_string();
+            current_row_width = word_width;
+        } else {
+            if !current_row.is_empty() {
+                current_row.push(' ');
+                current_row_width = current_row_width + space_width;
+            }
+            current_row.push_str(word);
+            current_row_width = current_row_width + word_width;
         }
+    }
+
+    if !current_row.is_empty() {
+        current_page_ops.push(Op::ShowText {
+            items: vec![TextItem::Text(current_row)],
+        });
+        current_page_ops.push(Op::AddLineBreak);
+        *current_y -= line_height;
+    }
 }
-
 
 pub fn measure_word(word: &str, font: &ParsedFont, size: Pt) -> Pt {
     let units_per_em = font.font_metrics.units_per_em as f32;
