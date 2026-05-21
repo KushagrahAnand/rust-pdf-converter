@@ -70,5 +70,6 @@ The repository includes ready-to-use assets:
 - [x] Word wrapping with glyph-accurate line measurement
 - [x] Modular code structure
 - [x] Support for diverse page sizes and layout orientations
+- [ ] Image to PDF compilation (.png, .jpg, .jpeg)
 - [ ] `.docx` to PDF conversion
 - [ ] `.pptx` to PDF conversion
