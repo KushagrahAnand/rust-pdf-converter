@@ -40,7 +40,7 @@ fn main() {
     let args = Cli::parse();
 
     let path_extension = args.input.extension().unwrap();
-    if path_extension == "jpg" || path_extension == "img" || path_extension == "png" || path_extension == "bmp" || path_extension == "webp" || path_extension == "gif" || path_extension == "tiff"
+    if path_extension == "jpg" || path_extension == "img" || path_extension == "png" || path_extension == "bmp" || path_extension == "webp" || path_extension == "gif" || path_extension == "tiff" || path_extension == "jpeg"
     {
         let pdf_bytes = create_pdf_img(args.input.clone());
          match write(args.output.clone(), pdf_bytes) {
