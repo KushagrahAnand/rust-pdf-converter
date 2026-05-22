@@ -1,12 +1,13 @@
 mod words;
 mod page_layout;
+pub mod images;
 
 use std::{path::PathBuf, process};
 use printpdf::*;
 use crate::words::*;
 use crate::page_layout::*;
 
-pub fn create_pdf(data: String, font_path: PathBuf, size: f32, paper: String, orientation: String) -> Vec<u8> {
+pub fn create_pdf_text(data: String, font_path: PathBuf, size: f32, paper: String, orientation: String) -> Vec<u8> {
     let mut doc = PdfDocument::new("PDF");
 
     let font = get_font(font_path);
