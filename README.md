@@ -1,6 +1,6 @@
 # rust-pdf-converter
 
-A fast, lightweight Rust CLI tool that converts text files and images into cleanly structured PDF documents using the `printpdf` and `clap` crates.
+A fast, lightweight Rust CLI tool that converts text files, Word documents, and images into cleanly structured PDF documents using the `printpdf` and `clap` crates.
 
 ## Features
 
@@ -9,6 +9,7 @@ A fast, lightweight Rust CLI tool that converts text files and images into clean
 - **Dynamic Multi-Page Engine:** Automatically paginates text across multiple pages without layout fractures or cut-offs.
 - **Word Wrapping:** Automatically wraps long lines using real font glyph width measurement for accurate line breaking.
 - **Image to PDF:** Converts a wide range of image formats directly to PDF.
+- **Word Document to PDF:** Converts `.docx` files to PDF, extracting paragraphs and tables.
 - **Configurable:** Font size, font path, page dimensions, orientation, input, and output paths are all configurable via flags.
 
 ## Supported Input Formats
@@ -16,6 +17,7 @@ A fast, lightweight Rust CLI tool that converts text files and images into clean
 | Format | Extension |
 |---|---|
 | Text | `.txt` |
+| Word Document | `.docx` |
 | JPEG | `.jpg`, `.jpeg` |
 | PNG | `.png` |
 | WebP | `.webp` |
@@ -42,16 +44,19 @@ converter --input image.jpg --output output.pdf
 |---|---|---|---|
 | `--input` | `-i` | Path to the source file | required |
 | `--output` | `-o` | Path for the generated PDF | required |
-| `--font` | `-f` | Path to a `.ttf` font file (text only) | `./assets/fonts/Roboto-Regular.ttf` |
-| `--size` | `-s` | Font size in points (text only) | `16.0` |
-| `--paper` | `-p` | Paper size: `a4`, `a3`, `letter`, `legal` (text only) | `a4` |
-| `--orientation` | `-r` | Orientation: `portrait`, `landscape` (text only) | `portrait` |
+| `--font` | `-f` | Path to a `.ttf` font file (text/docx only) | `./assets/fonts/Roboto-Regular.ttf` |
+| `--size` | `-s` | Font size in points (text/docx only) | `16.0` |
+| `--paper` | `-p` | Paper size: `a4`, `a3`, `letter`, `legal` (text/docx only) | `a4` |
+| `--orientation` | `-r` | Orientation: `portrait`, `landscape` (text/docx only) | `portrait` |
 
 ### Examples
 
 ```bash
 # Text to PDF
 converter -i ./assets/samples/sample.txt -o output.pdf -p a4 -r landscape -s 14.0
+
+# Word document to PDF
+converter -i document.docx -o output.pdf
 
 # Image to PDF
 converter -i photo.jpg -o output.pdf
@@ -98,5 +103,5 @@ The repository includes ready-to-use assets:
 - [x] Modular code structure
 - [x] Support for diverse page sizes and layout orientations
 - [x] Image to PDF conversion (`.jpg`, `.jpeg`, `.png`, `.webp`, `.bmp`, `.tiff`, `.gif`, `.img`)
-- [ ] `.docx` to PDF conversion
+- [x] `.docx` to PDF conversion (paragraphs and tables)
 - [ ] `.pptx` to PDF conversion
