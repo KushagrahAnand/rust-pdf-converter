@@ -1,6 +1,7 @@
 mod words;
 mod page_layout;
 pub mod images;
+pub mod docx;
 
 use std::{path::PathBuf, process};
 use printpdf::*;

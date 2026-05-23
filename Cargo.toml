@@ -7,3 +7,4 @@ edition = "2024"
 clap = { version = "4.6.1", features = ["derive"] }
 printpdf = {version = "0.9.1", features = ["images"]}
 image = "0.25"
+docx-rs = "0.4.20"

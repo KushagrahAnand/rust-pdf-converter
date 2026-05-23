@@ -3,9 +3,9 @@ use std::io::Read;
 use std::path::PathBuf;
 use std::process;
 use converter::create_pdf_text;
+use converter::images::create_pdf_img;
+use converter::docx::read_docx;
 use clap::Parser;
-mod images;
-use crate::images::*;
 
 #[derive(Parser)]
 ///Tool to create pdf from text file
@@ -39,42 +39,52 @@ struct Cli {
 fn main() {
     let args = Cli::parse();
 
-    let path_extension = args.input.extension().unwrap();
-    if path_extension == "jpg" || path_extension == "img" || path_extension == "png" || path_extension == "bmp" || path_extension == "webp" || path_extension == "gif" || path_extension == "tiff" || path_extension == "jpeg"
-    {
-        let pdf_bytes = create_pdf_img(args.input.clone());
-         match write(args.output.clone(), pdf_bytes) {
-            Ok(_) => println!("Successfully created pdf"),
-            Err(e) => {
-                eprintln!("Error in creating pdf: {}", e);
+    let extension = args.input
+        .extension()
+        .and_then(|e| e.to_str())
+        .unwrap_or("")
+        .to_lowercase();
+
+    let pdf_bytes = match extension.as_str() {
+        "jpg" | "jpeg" | "png" | "webp" | "bmp" | "tiff" | "gif" | "img" => {
+            create_pdf_img(args.input)
+        },
+        "txt" => {
+            let mut file = match File::open(args.input) {
+                Ok(file) => file,
+                Err(e) => {
+                    eprintln!("Error in getting input text file: {}", e);
+                    process::exit(1);
+                },
+            };
+
+            let mut data = String::new();
+            if let Err(e) = file.read_to_string(&mut data) {
+                eprintln!("Error: {}", e);
                 process::exit(1);
-            }
+            };
+
+            create_pdf_text(data, args.font, args.size, args.paper, args.orientation)
+        },
+        "docx" => {
+            let data = read_docx(args.input);
+            create_pdf_text(data, args.font, args.size, args.paper, args.orientation)
+        },
+        _ => {
+            eprintln!("Unsupported file format: {}. Supported: txt, docx, jpg, jpeg, png, webp, bmp, tiff, gif, img", extension);
+            process::exit(1);
         }
-    } else {
-        let mut file = match File::open(args.input.clone()) {
-            Ok(file) => file,
-            Err(e) => {
-                eprintln!("Error in getting input text file: {}", e);
-                process::exit(1);
-            },
-        };
+    };
 
-        let mut data = String::new();
-        if let Err(e) = file.read_to_string(&mut data) {
-            eprintln!("Error: {}", e);
-            process::exit(1)
-        };
+    save_pdf(pdf_bytes, args.output);
+}
 
-        let pdf_bytes = create_pdf_text(data, args.font, args.size, args.paper, args.orientation);
-
-        match write(args.output.clone(), pdf_bytes) {
-            Ok(_) => println!("Successfully created pdf"),
-            Err(e) => {
-                eprintln!("Error in creating pdf: {}", e);
-                process::exit(1);
-            }
+fn save_pdf(pdf_bytes: Vec<u8>, output: PathBuf) {
+    match write(output, pdf_bytes) {
+        Ok(_) => println!("Successfully created pdf"),
+        Err(e) => {
+            eprintln!("Error in creating pdf: {}", e);
+            process::exit(1);
         }
     }
-
-    
 }
