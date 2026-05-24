@@ -9,7 +9,7 @@ A fast, lightweight Rust CLI tool that converts text files, Word documents, and 
 - **Dynamic Multi-Page Engine:** Automatically paginates text across multiple pages without layout fractures or cut-offs.
 - **Word Wrapping:** Automatically wraps long lines using real font glyph width measurement for accurate line breaking.
 - **Image to PDF:** Converts a wide range of image formats directly to PDF.
-- **Word Document to PDF:** Converts `.docx` files to PDF, extracting paragraphs and tables.
+- **Word Document to PDF:** Converts `.docx` files to PDF, extracting paragraphs, tables, images, and page breaks.
 - **Configurable:** Font size, font path, page dimensions, orientation, input, and output paths are all configurable via flags.
 
 ## Supported Input Formats
@@ -103,5 +103,5 @@ The repository includes ready-to-use assets:
 - [x] Modular code structure
 - [x] Support for diverse page sizes and layout orientations
 - [x] Image to PDF conversion (`.jpg`, `.jpeg`, `.png`, `.webp`, `.bmp`, `.tiff`, `.gif`, `.img`)
-- [x] `.docx` to PDF conversion (paragraphs and tables)
+- [x] `.docx` to PDF conversion (paragraphs, tables, images, page breaks)
 - [ ] `.pptx` to PDF conversion
