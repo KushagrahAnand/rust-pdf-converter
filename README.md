@@ -10,6 +10,7 @@ A fast, lightweight Rust CLI tool that converts text files, Word documents, and 
 - **Word Wrapping:** Automatically wraps long lines using real font glyph width measurement for accurate line breaking.
 - **Image to PDF:** Converts a wide range of image formats directly to PDF.
 - **Word Document to PDF:** Converts `.docx` files to PDF, extracting paragraphs, tables, images, and page breaks.
+- **Multi-File Merging:** Merge multiple files of the same type into a single PDF, with each file starting on a new page.
 - **Configurable:** Font size, font path, page dimensions, orientation, input, and output paths are all configurable via flags.
 
 ## Supported Input Formats
@@ -29,7 +30,7 @@ A fast, lightweight Rust CLI tool that converts text files, Word documents, and 
 ## Usage
 
 ```bash
-converter --input <PATH> --output <PATH> [--font <PATH>] [--size <POINTS>] [--paper <SIZE>] [--orientation <ORIENTATION>]
+converter --input <PATH> [<PATH>...] --output <PATH> [--font <PATH>] [--size <POINTS>] [--paper <SIZE>] [--orientation <ORIENTATION>]
 ```
 
 For image conversion, only `--input` and `--output` are required. All other flags are ignored.
@@ -42,7 +43,7 @@ converter --input image.jpg --output output.pdf
 
 | Flag | Short | Description | Default |
 |---|---|---|---|
-| `--input` | `-i` | Path to the source file | required |
+| `--input` | `-i` | One or more input files (must be same extension) | required |
 | `--output` | `-o` | Path for the generated PDF | required |
 | `--font` | `-f` | Path to a `.ttf` font file (text/docx only) | `./assets/fonts/Roboto-Regular.ttf` |
 | `--size` | `-s` | Font size in points (text/docx only) | `16.0` |
@@ -52,16 +53,23 @@ converter --input image.jpg --output output.pdf
 ### Examples
 
 ```bash
-# Text to PDF
+# Single text file to PDF
 converter -i ./assets/samples/sample.txt -o output.pdf -p a4 -r landscape -s 14.0
 
-# Word document to PDF
+# Merge multiple text files into one PDF
+converter -i file1.txt file2.txt file3.txt -o combined.pdf
+
+# Single Word document to PDF
 converter -i document.docx -o output.pdf
 
-# Image to PDF
+# Merge multiple Word documents into one PDF
+converter -i doc1.docx doc2.docx doc3.docx -o combined.pdf
+
+# Single image to PDF
 converter -i photo.jpg -o output.pdf
-converter -i photo.png -o output.pdf
-converter -i photo.webp -o output.pdf
+
+# Merge multiple images into one PDF
+converter -i photo1.jpg photo2.jpg photo3.jpg -o combined.pdf
 ```
 
 ## Installation
@@ -104,4 +112,5 @@ The repository includes ready-to-use assets:
 - [x] Support for diverse page sizes and layout orientations
 - [x] Image to PDF conversion (`.jpg`, `.jpeg`, `.png`, `.webp`, `.bmp`, `.tiff`, `.gif`, `.img`)
 - [x] `.docx` to PDF conversion (paragraphs, tables, images, page breaks)
+- [x] Multi-file merging into a single PDF
 - [ ] `.pptx` to PDF conversion
