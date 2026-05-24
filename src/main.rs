@@ -2,7 +2,7 @@ use std::fs::{File, write};
 use std::io::Read;
 use std::path::PathBuf;
 use std::process;
-use converter::create_pdf_text;
+use converter::{create_pdf_text, create_pdf_docx};
 use converter::images::create_pdf_img;
 use converter::docx::read_docx;
 use clap::Parser;
@@ -67,8 +67,8 @@ fn main() {
             create_pdf_text(data, args.font, args.size, args.paper, args.orientation)
         },
         "docx" => {
-            let data = read_docx(args.input);
-            create_pdf_text(data, args.font, args.size, args.paper, args.orientation)
+            let blocks = read_docx(args.input);
+            create_pdf_docx(blocks, args.font, args.size, args.paper, args.orientation)
         },
         _ => {
             eprintln!("Unsupported file format: {}. Supported: txt, docx, jpg, jpeg, png, webp, bmp, tiff, gif, img", extension);
